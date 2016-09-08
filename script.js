@@ -1,8 +1,13 @@
+$(document).ready(function(){
+   var gameBoard = new gameTemplate();
+   gameBoard.gameTempInit(playerInfo);
+   gameBoard.createCell(4);
+});
 
 var gameTemplate = function(){
     this.domElement;
-    this.playerInfo = [];
-    this.childrenObj = [];
+    this.playerInfo = []; //to hold basic player info
+    this.childrenObj = []; //holds children objects, but have not been used once.
     this.gameCount = 0;
     this.gameTempInit = function(playerInfo){
       this.createDomElement();
@@ -12,8 +17,8 @@ var gameTemplate = function(){
       var playerObjs = playerInfo;
       for(index in playerObjs){
           this.playerInfo.push(playerObjs[index]);
-      };
-      console.log(this.playerInfo);
+      }
+      console.log('this.playerInfo',this.playerInfo);
     };
     this.createDomElement = function(){
         this.domElement = $('<div>').addClass('gameBoard');
@@ -30,18 +35,19 @@ var gameTemplate = function(){
         console.log('this.childrenObj : ',this.childrenObj);
     };
     this.handleClick = function(child){
-        var playerImg = this.determineTurn();
-        child.changeDom(playerImg);
+        var playerObj = this.determineTurn();
+        child.changeDom(playerObj);
         this.checkWinningCondition();
     };
     this.determineTurn = function(){
+        console.log("current gameCount : ",this.gameCount);
         if(this.gameCount%2 == 0){
-            var firstPlayer = this.playerInfo[0].logo;
+            var firstPlayer = this.playerInfo[0];
             this.gameCount++;
             return firstPlayer;
         }
         else{
-            var secondPlayer = this.playerInfo[1].logo;
+            var secondPlayer = this.playerInfo[1];
             this.gameCount++;
             return secondPlayer;
         }
@@ -54,27 +60,32 @@ var gameTemplate = function(){
 var cellTemplate = function(parent){
     this.parent = parent;
     this.domElement;
+    this.player
     this.gameCellInit = function(order){
         return this.createDomElement(order);
     };
     this.createDomElement = function(order){
         var self = this;
-        this.domElement = $('<div>').addClass('tictactoeCell').attr({'name':'div'+order});
+        this.domElement = $('<div>').attr({'name':'div'+order,'class':'tictactoeCell'}).html(order);
         this.domElement.click(function(){
             self.parent.handleClick(self);
         });
         return this;
     };
-    this.changeDom = function(img){
+    this.changeDom = function(playerObj){
+        this.player = playerObj;
+        var playerImg = playerObj.logo;
         console.log('hello this is div name', this.domElement.attr('name'));
-        this.domElement.html(img);
+        this.domElement.html(playerImg);
     }
 };
 var playerInfo = {
   player1 : {
-      logo : 'O'
+      logo : 'O',
+      point : 10
   }, 
   player2 : {
-      logo : 'X'
+      logo : 'X',
+      point : -10
   }
 };
