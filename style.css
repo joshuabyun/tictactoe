@@ -1,0 +1,26 @@
+/*use media query to break sizes to have perfect square*/
+*{
+    font-size: 0;
+}
+body{
+    height: 100vh;
+    width: 100vw;
+    display:inline-block;
+    background-color: lightblue;
+    margin: 0;
+}
+.gameBoard{
+    height:80%;
+    width:80%;
+    display: inline-block;
+    background-color: lightgreen;
+}
+.tictactoeCell{
+    background-color: lightcoral;
+    height:30%;
+    width:30%;
+    box-sizing: border-box;
+    border:1px solid black;
+    display:inline-block;
+    font-size: initial;
+}
