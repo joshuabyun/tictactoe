@@ -6,8 +6,8 @@ $(document).ready(function(){
 
 var gameTemplate = function(){
     this.domElement;
-    this.playerInfo = []; //to hold basic player info
-    this.childrenObj = []; //holds children objects, but have not been used once.
+    this.playerInfo = [];
+    this.childrenObj = [];
     this.gameCount = 0;
     this.numRow;
     this.gameTempInit = function(playerInfo){
@@ -33,11 +33,14 @@ var gameTemplate = function(){
             this.domElement.append(cellObj.domElement);
             this.childrenObj.push(cellObj);
         }
-        console.log('this.childrenObj : ',this.childrenObj);
     };
     this.handleClick = function(child){
-        var playerObj = this.determineTurn();
-        child.changeDom(playerObj);
+        if(child.playerPoint != undefined){
+            console.log('cell already clicked, choose another cell');
+            return;
+        }
+        var player = this.determineTurn();
+        child.changeDom(player);
         this.runWinningCondFunc();
     };
     this.determineTurn = function(){
@@ -51,24 +54,15 @@ var gameTemplate = function(){
         this.performColCheck();
         this.performDiagonalCheck();
     };
-    this.checkWhoWon = function(pointSum){
-        switch(pointSum){
-            case 10*this.numRow:
-                console.log('player1 won');
-                break;
-            case -10*this.numRow:
-                console.log('player2 won');
-                break;
-                return;
-        }
-    };
     this.performRowCheck = function(){
         for(var i =0; i< this.childrenObj.length-1;i += this.numRow){
             var pointSum = null;
             for(var j =i; j < i+this.numRow; j++){
+                console.log("pos "+j+" score : "+this.childrenObj[j].playerPoint);
                 pointSum += this.childrenObj[j].playerPoint
             }
             this.checkWhoWon(pointSum);
+            console.log('row : '+i+" Sum : "+pointSum);
         }
     };
     this.performColCheck =function(){
@@ -78,6 +72,7 @@ var gameTemplate = function(){
                 pointSum += this.childrenObj[j].playerPoint;
             }
             this.checkWhoWon(pointSum);
+            console.log('col : '+i+" Sum : "+pointSum);
         }
     };
     this.performDiagonalCheck = function(){
@@ -87,23 +82,57 @@ var gameTemplate = function(){
             diagonalPointSum += this.childrenObj[i].playerPoint; //top left to bottom right
             invDiagoanlPointSum += this.childrenObj[j].playerPoint; //bottom left to top right
         }
+        console.log('diagonal : '+ diagonalPointSum);
+        console.log('inverse diagonal : '+ invDiagoanlPointSum);
         this.checkWhoWon(diagonalPointSum);
         this.checkWhoWon(invDiagoanlPointSum);
+    };
+    this.checkWhoWon = function(pointSum){
+        switch(pointSum){
+            case 10*this.numRow:
+                this.handleGameOver(this.playerInfo[0]);
+                this.gameCount = 0;
+                break;
+            case -10*this.numRow:
+                this.handleGameOver(this.playerInfo[1]);
+                this.gameCount = 0;
+                break;
+            default :
+                if(this.gameCount == Math.pow(this.numRow,2)){
+                    this.handleGameOver('tie');
+                    this.gameCount = 0;
+                }
+                else{
+                    return;
+                }
+        }
+    };
+    this.handleGameOver = function(winningPlayer){
+        if(typeof(winningPlayer) == 'string'){
+            console.log('game tie!')
+        }
+        else{
+            console.log(winningPlayer.logo+" is the winner!");
+        }
+        for(var i = 0 ; i < this.childrenObj.length; i++){
+            this.childrenObj[i].reset();
+            console.log('slot'+i+" resetted");
+            }
     }
-
 };
-
 var cellTemplate = function(parent){
     this.parent = parent;
     this.domElement;
     this.playerLogo;
     this.playerPoint;
+    var cellOrder;
     this.gameCellInit = function(order){
         return this.createDomElement(order);
     };
     this.createDomElement = function(order){
+        cellOrder = order;
         var self = this;
-        this.domElement = $('<div>').attr({'name':'div'+order,'class':'tictactoeCell'}).html(order);
+        this.domElement = $('<div>').attr({'name':'div'+order,'class':'tictactoeCell'}).html(cellOrder);
         this.domElement.click(function(){
             self.parent.handleClick(self);
         });
@@ -112,19 +141,27 @@ var cellTemplate = function(parent){
     this.changeDom = function(playerObj){
         this.playerLogo = playerObj.logo;//player object with logo and point
         this.playerPoint = playerObj.point;
-        var playerImg = playerObj.logo;
-        console.log('hello this is div name', this.domElement.attr('name'));
-        this.domElement.html(playerImg);
-
+        this.domElement.html(this.playerLogo).css({
+            'background-color' : playerObj.backgroundColor
+        });
+    };
+    this.reset = function(){
+        this.playerLogo = null;
+        this.playerPoint = null;
+        this.domElement.html(cellOrder).css({
+            'background-color' : 'white'
+            });
     }
 };
 var playerInfo = {
   player1 : {
       logo : 'O',
-      point : 10
+      point : 10,
+      backgroundColor : 'blue'
   }, 
   player2 : {
       logo : 'X',
-      point : -10
+      point : -10,
+      backgroundColor : 'green'
   }
 };

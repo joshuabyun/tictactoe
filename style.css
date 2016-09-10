@@ -16,7 +16,7 @@ body{
     background-color: lightgreen;
 }
 .tictactoeCell{
-    background-color: lightcoral;
+    background-color: white;
     height:30%;
     width:30%;
     box-sizing: border-box;
