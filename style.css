@@ -1,4 +1,3 @@
-/*use media query to break sizes to have perfect square*/
 *{
     font-size: 0;
 }
@@ -15,9 +14,15 @@ body{
     display: inline-block;
     background-color: lightgreen;
 }
+.cellContainer{
+    height:33.33%;
+    width:100%;
+    display: inline-block;
+    background-color: pink;
+}
 .tictactoeCell{
     background-color: white;
-    height:30%;
+    height:100%;
     width:30%;
     box-sizing: border-box;
     border:1px solid black;
