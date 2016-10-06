@@ -1,9 +1,11 @@
 $( document ).ready(function(){
     applyClickHandler();
 });
-var scoreBoard = [[0,0,0],
-                   [0,0,0],
-                   [0,0,0]];
+var scoreBoard = [[0,0,0,0,0],
+                   [0,0,0,0,0],
+                   [0,0,0,0,0],
+                   [0,0,0,0,0],
+                   [0,0,0,0,0]];
 var counter = 0;
 var applyClickHandler = function(){
   $('.tictactoeCell').click(function(){
@@ -51,49 +53,50 @@ var changeCellColor = function(clickedCell,player){
     }
 };
 var initScoreReaders = function(){
-    horizontalScoreReader(winHandler);
-    verticalScoreReader(winHandler);
+    if(scoreReader(winHandler,"horizontal")){
+        return;
+    }
+    if(scoreReader(winHandler,"vertical")){
+        return true;
+    }
     diagonalScoreReader(winHandler);
 };
-var horizontalScoreReader = function(winHandler){
-  for(var row = 0; row < scoreBoard.length; row++){
+var scoreReader = function(winHandler,checkType){
+    for(var i = 0; i < scoreBoard.length; i++){
       var sum = 0;
-      for(var col = 0; col < scoreBoard.length; col++){
-          sum += scoreBoard[row][col];
+      for(var j = 0; j < scoreBoard.length; j++){
+          switch (checkType){
+              case "horizontal":
+                  sum += scoreBoard[i][j];
+                  break;
+              case "vertical":
+                  sum += scoreBoard[j][i];
+                  break;
+          }
           if(sum == scoreBoard.length || sum == -1*scoreBoard.length ){
-              winHandler(sum,'horizontal');
+              winHandler(sum,checkType);
+              return true;
           }
       }
   }
 };
-// var verticalScoreReader = function(winHandler){
-//     var sum = 0;
-//     for(var col = 0; col < scoreBoard.length; col++){
-//         for(var row = 0; row < scoreBoard.length; row++){
-//             sum += scoreBoard[col][row];
-//             if(sum == scoreBoard.length || sum == -1*scoreBoard.length ){
-//                 winHandler(sum,'vertical');
-//             }
-//         }
-//     }
-// };
-// var diagonalScoreReader = function(winHandler){
-//     var sum1 = 0;
-//     var sum2 = 0;
-//     var colNum1 = -1;
-//     var colNum2 = scoreBoard.length-1;
-//     for(var i = 0, j = scoreBoard.length-1; i < scoreBoard.length, j < 0; i++, j--){
-//         colNum1++;
-//         sum1 += scoreBoard[i][colNum1];
-//         sum2 += scoreBoard[j][colNum2];
-//         colNum2--;
-//         if(sum1 == scoreBoard.length || sum1 == -1*scoreBoard.length){
-//             winHandler(sum1,'diagonal top left to bottom right');
-//         }else if(sum2 == scoreBoard.length || sum2 == -1*scoreBoard.length){
-//             winHandler(sum2, 'diagonal bottom right to top left');
-//         }
-//     }
-// };
+var diagonalScoreReader = function(winHandler){
+    var sum1 = 0;
+    var sum2 = 0;
+    var i;
+    var col = scoreBoard.length-1;
+    for(i = 0;i <scoreBoard.length; i++){
+        sum1 += scoreBoard[i][i];
+        sum2 += scoreBoard[i][col-i];
+        if(sum1 == scoreBoard.length || sum1 == -1*scoreBoard.length){
+            winHandler(sum1,"top left to bottom right");
+            return true;
+        }else if(sum2 == -1*scoreBoard.length || sum2 == scoreBoard.length){
+            winHandler(sum2,"top right to bottom left");
+            return true;
+        }
+    }
+};
 
 var winHandler = function(winnerScore, winningMethod){
   if(winnerScore > 0){
@@ -101,5 +104,4 @@ var winHandler = function(winnerScore, winningMethod){
   }else if(winnerScore < 0){
       console.log('blue won by '+ winningMethod);
   }
-
 };

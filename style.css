@@ -15,7 +15,7 @@ body{
     background-color: lightgreen;
 }
 .cellContainer{
-    height:33.33%;
+    height:20%;
     width:100%;
     display: inline-block;
     background-color: pink;
@@ -23,7 +23,7 @@ body{
 .tictactoeCell{
     background-color: white;
     height:100%;
-    width:30%;
+    width:20%;
     box-sizing: border-box;
     border:1px solid black;
     display:inline-block;
