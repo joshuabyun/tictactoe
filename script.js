@@ -122,5 +122,5 @@ var checkVerticalCol = function(colIndex){
 var resetGame = function(){
   counter = 0;
   scoreBoard = [[0,0,0],[0,0,0],[0,0,0]];
-  $('.tictactoeCell').css({"background-color":"white"});
+  $('.tictactoeCell').css({"background-color":"white"}).removeClass('clicked');
 };
