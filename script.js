@@ -15,7 +15,7 @@ var applyClickHandler = function(){
       changeScoreBoard($(this).parent().index(),$(this).index(),player);
       changeCellColor(this,player);
       differentiateClickedCell(this);
-      initScoreSpecifiedScoreReaders($(this).parent().index(),$(this).index(),player);
+      initScoreScoreReaders($(this).parent().index(),$(this).index(),player);
       counter++;
   });
 };
@@ -50,53 +50,36 @@ var changeCellColor = function(clickedCell,player){
             break;
     }
 };
-var initScoreSpecifiedScoreReaders = function(rowIndex,colIndex){
-    var clickedPos = [rowIndex,colIndex];
-    var centerPos = [Math.floor(scoreBoard.length/2)-1,Math.floor(scoreBoard.length/2)-1];
-    var rowSum;
-    var colSum;
-    var diagonal1Sum;
-    var diagonal2Sum;
-    switch(clickedPos){
-        case [0,0]:
-            rowSum = checkHorizontalRow(clickedPos[0]);
-            colSum = checkVerticalCol(clickedPos[1]);
-            diagonal1Sum = diagonalTopLeftBtmRht();
-            break;
-        case [0,scoreBoard.length-1]:
-            rowSum = checkHorizontalRow(clickedPos[0]);
-            colSum = checkVerticalCol(clickedPos[1]);
-            diagonal2Sum =diagonalTopRhtBtmLeft();
-            break;
-        case [scoreBoard.length-1,0]:
-            rowSum = checkHorizontalRow(clickedPos[0]);
-            colSum = checkVerticalCol(clickedPos[1]);
-            diagonal2Sum = diagonalTopRhtBtmLeft();
-            break;
-        case [scoreBoard.length-1,scoreBoard.length-1]:
-            rowSum = checkHorizontalRow(clickedPos[0]);
-            colSum = checkVerticalCol(clickedPos[1]);
-            diagonal1Sum = diagonalTopLeftBtmRht();
-            break;
-        case centerPos:
-            rowSum = checkHorizontalRow(clickedPos[0]);
-            colSum = checkVerticalCol(clickedPos[1]);
-            diagonal1Sum = diagonalTopLeftBtmRht();
-            diagonal2Sum = diagonalTopRhtBtmLeft();
-            break;
-        default :
-            rowSum = checkHorizontalRow(clickedPos[0]);
-            colSum = checkVerticalCol(clickedPos[1]);
-        }
-        checkForWinner(rowSum,colSum,diagonal1Sum,diagonal2Sum);
+var initScoreScoreReaders = function(rowIndex,colIndex){
+    var center = Math.floor(scoreBoard.length);
+    var row;
+    var col;
+    var diagonal1;
+    var diagonal2;
+    if(rowIndex == center && colIndex == center){
+        diagonal1 = diagonalTopLeftBtmRht();
+        diagonal2 = diagonalTopRhtBtmLeft();
+        row = checkHorizontalRow(rowIndex);
+        col = checkVerticalCol(colIndex);
+    }else if((rowIndex == 0 && colIndex == 0) || (rowIndex == scoreBoard.length-1 && colIndex == scoreBoard.length-1)){
+        diagonal1 = diagonalTopLeftBtmRht();
+        row = checkHorizontalRow(rowIndex);
+        col = checkVerticalCol(colIndex);
+    }else if((rowIndex == 0 && colIndex == scoreBoard.length-1) || (rowIndex == scoreBoard.length-1 && colIndex == 0)){
+        diagonal2 = diagonalTopRhtBtmLeft();
+        row = checkHorizontalRow(rowIndex);
+        col = checkVerticalCol(colIndex);
+    }else{
+        row = checkHorizontalRow(rowIndex);
+        col = checkVerticalCol(colIndex);
+    }
+    checkForWinner(row,col,diagonal1,diagonal2);
 };
 var checkForWinner = function(rowSum,colSum,diagonal1Sum,diagonal2Sum){
     if(rowSum == scoreBoard.length || colSum == scoreBoard.length || diagonal1Sum == scoreBoard.length || diagonal2Sum == scoreBoard.length){
-        //gold wins
-        console.log('gold wins');
+        console.log('gold won');
     }else if(rowSum == -1*scoreBoard.length || colSum == -1*scoreBoard.length || diagonal1Sum == -1*scoreBoard.length || diagonal2Sum == -1*scoreBoard.length){
-        //blue wins
-        console.log('blue wins');
+        console.log('blue won');
     }
 };
 var diagonalTopLeftBtmRht = function(){
@@ -127,7 +110,4 @@ var checkVerticalCol = function(colIndex){
         sum += scoreBoard[index][colIndex]
     });
     return sum;
-};
-var aiFindBestCellPos = function(){
-
 };
