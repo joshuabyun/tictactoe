@@ -1,28 +1,71 @@
 $( document ).ready(function(){
-    applyClickToCharImg();
+    initSettingClickHandlers();
 });
+var scoreBoard = null;
+var counter = 0;
+var background = null;
 //----------------------------reset functions --------------------------------------------
+var initSettingClickHandlers = function(){
+    applyClickToCharImg();
+    applyClickToStart();
+};
 var applyClickToCharImg = function(){
-    $('.charImg').click(function(){
+    $('.characters').on('click','.charImg',function(){
         $(this).siblings().removeClass('selected');
         $(this).addClass('selected');
     })
 };
 var applyClickToStart = function(){
-  $('#start').click(function(){
-      //gather all info : number of players, game size, p1char selected, p2char selected
-      //init game based on the info
-  })
+    $('#settingsButtons').on('click','#start',function(){
+        var numberOfPlayers = Number($('.player-buttons:checked').val());
+        var gameBoardSize = Number($('.game-size:checked').val());
+        var p1Image = $('.player1Char > .selected').css('background-image');
+        var p2Image = $('.player2Char > .selected').css('background-image');
+        $('#startNotification').remove();
+        initGame(numberOfPlayers,gameBoardSize,p1Image,p2Image);
+        removeClickOnSetting();
+    })};
+var removeClickOnSetting = function(){
+      $('.characters, #settingsButtons').off("click");
+};
+//----------------------------actual game play functions ---------------------------------
+
+var initGame = function(numberOfPlayers,gameBoardSize,p1Image,p2Image){
+  background = [p1Image,p2Image];
+  createGameBoard(gameBoardSize);
+  scoreBoard = createScoreBoard(gameBoardSize);
+  applyGameBoardClickHandler();
+};
+var createScoreBoard = function(gameBoardSize){
+    switch(gameBoardSize){
+        case 5 :
+            return [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]];
+        default :   // gameBoardSize = 3
+            return [[0,0,0],[0,0,0],[0,0,0]]
+    }
+};
+var createGameBoard = function(gameBoardSize){
+    var dimension = getCssDimensionForGameBoard(gameBoardSize);
+    for(var i = 0;i < gameBoardSize;i++){
+        var cellContainer = $('<div>').addClass('cellContainer').css({'height' : dimension[0]+"%"});
+        for(var j = 0; j < gameBoardSize; j++){
+            var tictactoeCell = $('<div>').addClass('tictactoeCell').css({'width' : dimension[1]+"%"});
+            tictactoeCell.appendTo(cellContainer);
+        }
+        cellContainer.appendTo($('.gameBoard'));
+    }
+};
+var getCssDimensionForGameBoard = function(gameBoardSize){
+    if(gameBoardSize == 3){
+        var cellContainerHeight = 30;
+        var tictactoeCellWidth = 30;
+    }else if(gameBoardSize == 5){
+        var cellContainerHeight = 20;
+        var tictactoeCellWidth = 20;
+    }
+    return [cellContainerHeight,tictactoeCellWidth];
 };
 
-
-
-//----------------------------acutal game play functions ---------------------------------
-var scoreBoard = null;
-// = [[0,0,0],
-//    [0,0,0],
-//    [0,0,0]];
-var counter = 0;
 var applyGameBoardClickHandler = function(){
   $('.tictactoeCell').click(function(){
       if($(this).hasClass('clicked')){
@@ -30,6 +73,8 @@ var applyGameBoardClickHandler = function(){
           return;
       }
       var player = checkWhosTurn(counter);
+      console.log($(this).parent().index());
+      console.log($(this).index());
       changeScoreBoard($(this).parent().index(),$(this).index(),player);
       changeCellColor(this,player);
       differentiateClickedCell(this);
@@ -54,16 +99,26 @@ var checkWhosTurn = function(counter){
     return returnVal;
 };
 var changeScoreBoard = function(parentPos,childPos,player){
+    console.log(scoreBoard);
     scoreBoard[parentPos][childPos] = player;
 };
 var changeCellColor = function(clickedCell,player){
-    var background = ['gold','blue'];
     switch (player){
         case 1:
-            $(clickedCell).css({'background-color':background[0]});
+            $(clickedCell).css({
+                'background-image':background[0],
+                'background-position': 'center',
+                'background-repeat': 'no-repeat',
+                'background-size': 'contain'
+            });
             break;
         case -1:
-            $(clickedCell).css({'background-color':background[1]});
+            $(clickedCell).css({
+                'background-image':background[1],
+                'background-position': 'center',
+                'background-repeat': 'no-repeat',
+                'background-size': 'contain'
+            });
             break;
     }
 };
@@ -140,17 +195,14 @@ var resetGame = function(){ //////////////////////////////////need to fix for se
     $('.tictactoeCell').addClass('clicked');
     setTimeout(function(){
         counter = 0;
-        scoreBoard = [[0,0,0],[0,0,0],[0,0,0]];
-        $('.tictactoeCell').css({"background-color":"white"}).removeClass('clicked');
+        scoreBoard = null;
+        background = null;
+        initSettingClickHandlers
+        $('.gameBoard *').remove();
+
     },3000);
 };
 // ------------------------------------------------------------------------
-
-
-
-
-
-
 // var evaluateMiniMax = function(){
 //   //always start with -1 and alternate
 // };

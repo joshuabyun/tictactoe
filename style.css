@@ -120,7 +120,7 @@ body{
     width: 100%;
 }
 .tictactoeCell{
-    /*border: 1px solid black;*/
+    border: 1px solid grey;
     position: relative;
     display: inline-block;
     /*width: 20%;  !* 20% if 5rows & 30% if 3 rows*!*/
@@ -131,6 +131,8 @@ body{
 /*----------------notification--------------------*/
 #startNotification, #winnerMsg{
     position: relative;
+    color: #f44336;
+    text-shadow: 1px 1px yellow;
     top: 40%;
     transform: translateY(-50%);
     width: 100%;
