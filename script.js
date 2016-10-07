@@ -37,7 +37,6 @@ var checkWhosTurn = function(counter){
 };
 var changeScoreBoard = function(parentPos,childPos,player){
     scoreBoard[parentPos][childPos] = player;
-    console.log(scoreBoard);
 };
 var changeCellColor = function(clickedCell,player){
     var background = ['gold','blue'];
@@ -76,7 +75,6 @@ var initScoreScoreReaders = function(rowIndex,colIndex){
     checkForWinner(row,col,diagonal1,diagonal2);
 };
 var checkForWinner = function(rowSum,colSum,diagonal1Sum,diagonal2Sum){
-    console.log(counter);
     if(rowSum == scoreBoard.length || colSum == scoreBoard.length || diagonal1Sum == scoreBoard.length || diagonal2Sum == scoreBoard.length){
         console.log('gold won');
         resetGame();
@@ -86,7 +84,6 @@ var checkForWinner = function(rowSum,colSum,diagonal1Sum,diagonal2Sum){
         resetGame();
         return;
     }
-    console.log(Math.sqrt(scoreBoard.length)-1);
     if(counter == Math.pow(scoreBoard.length,2)-1){
         console.log('draw');
         resetGame();
@@ -130,3 +127,30 @@ var resetGame = function(){
     },3000);
 };
 
+var evaluateMiniMax = function(){
+  //always start with -1 and alternate  
+};
+var callAi = function(){
+    var currentScoreBoard = createScoreBoardCopy();
+    //loopThrough all 0 value position of the scoreboard.
+    for(var i = 0; i < currentScoreBoard.length; i++){
+        for(var j = 0; j < currentScoreBoard.length; j++){
+            if(currentScoreBoard[i][j] == 0){
+                //evaluate 
+            }
+        }
+    }
+    //evaluate each position - needs to return list of initial input position that returns -3
+};
+var createScoreBoardCopy = function(){
+    var currentScoreBoard = [];
+    for(var i = 0; i < scoreBoard.length;i++){
+        var innerArr = [];
+        for(var j = 0; j < scoreBoard.length; j++){
+            var num = scoreBoard[i][j];
+            innerArr.push(num);
+        }
+        currentScoreBoard.push(innerArr);
+    }
+    return currentScoreBoard;
+};
