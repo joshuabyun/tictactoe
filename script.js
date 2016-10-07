@@ -59,39 +59,45 @@ var initScoreSpecifiedScoreReaders = function(rowIndex,colIndex){
     var diagonal2Sum;
     switch(clickedPos){
         case [0,0]:
-            rowSum = checkHorizontalRow(clickedPos[1]);
-            colSum = checkVerticalCol(clickedPos[0]);
+            rowSum = checkHorizontalRow(clickedPos[0]);
+            colSum = checkVerticalCol(clickedPos[1]);
             diagonal1Sum = diagonalTopLeftBtmRht();
             break;
         case [0,scoreBoard.length-1]:
-            rowSum = checkHorizontalRow(clickedPos[1]);
-            colSum = checkVerticalCol(clickedPos[0]);
+            rowSum = checkHorizontalRow(clickedPos[0]);
+            colSum = checkVerticalCol(clickedPos[1]);
             diagonal2Sum =diagonalTopRhtBtmLeft();
             break;
         case [scoreBoard.length-1,0]:
-            rowSum = checkHorizontalRow(clickedPos[1]);
-            colSum = checkVerticalCol(clickedPos[0]);
+            rowSum = checkHorizontalRow(clickedPos[0]);
+            colSum = checkVerticalCol(clickedPos[1]);
             diagonal2Sum = diagonalTopRhtBtmLeft();
             break;
         case [scoreBoard.length-1,scoreBoard.length-1]:
-            rowSum = checkHorizontalRow(clickedPos[1]);
-            colSum = checkVerticalCol(clickedPos[0]);
+            rowSum = checkHorizontalRow(clickedPos[0]);
+            colSum = checkVerticalCol(clickedPos[1]);
             diagonal1Sum = diagonalTopLeftBtmRht();
             break;
         case centerPos:
-            rowSum = checkHorizontalRow(clickedPos[1]);
-            colSum = checkVerticalCol(clickedPos[0]);
+            rowSum = checkHorizontalRow(clickedPos[0]);
+            colSum = checkVerticalCol(clickedPos[1]);
             diagonal1Sum = diagonalTopLeftBtmRht();
             diagonal2Sum = diagonalTopRhtBtmLeft();
             break;
         default :
-            rowSum = checkHorizontalRow(clickedPos[1]);
-            colSum = checkVerticalCol(clickedPos[0]);
+            rowSum = checkHorizontalRow(clickedPos[0]);
+            colSum = checkVerticalCol(clickedPos[1]);
         }
         checkForWinner(rowSum,colSum,diagonal1Sum,diagonal2Sum);
 };
 var checkForWinner = function(rowSum,colSum,diagonal1Sum,diagonal2Sum){
-    
+    if(rowSum == scoreBoard.length || colSum == scoreBoard.length || diagonal1Sum == scoreBoard.length || diagonal2Sum == scoreBoard.length){
+        //gold wins
+        console.log('gold wins');
+    }else if(rowSum == -1*scoreBoard.length || colSum == -1*scoreBoard.length || diagonal1Sum == -1*scoreBoard.length || diagonal2Sum == -1*scoreBoard.length){
+        //blue wins
+        console.log('blue wins');
+    }
 };
 var diagonalTopLeftBtmRht = function(){
     var sum = 0;
