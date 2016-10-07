@@ -91,7 +91,7 @@ var checkForWinner = function(rowSum,colSum,diagonal1Sum,diagonal2Sum){
 };
 var diagonalTopLeftBtmRht = function(){
     var sum = 0;
-    for(var i = 0;i <scoreBoard.length; i++){
+    for(var i = 0;i <scoreBoard.length; i++){   
         sum += scoreBoard[i][i];
     }
     return sum;
