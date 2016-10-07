@@ -1,11 +1,29 @@
 $( document ).ready(function(){
-    applyClickHandler();
+    applyClickToCharImg();
 });
-var scoreBoard = [[0,0,0],
-                   [0,0,0],
-                   [0,0,0]];
+//----------------------------reset functions --------------------------------------------
+var applyClickToCharImg = function(){
+    $('.charImg').click(function(){
+        $(this).siblings().removeClass('selected');
+        $(this).addClass('selected');
+    })
+};
+var applyClickToStart = function(){
+  $('#start').click(function(){
+      //gather all info : number of players, game size, p1char selected, p2char selected
+      //init game based on the info
+  })
+};
+
+
+
+//----------------------------acutal game play functions ---------------------------------
+var scoreBoard = null;
+// = [[0,0,0],
+//    [0,0,0],
+//    [0,0,0]];
 var counter = 0;
-var applyClickHandler = function(){
+var applyGameBoardClickHandler = function(){
   $('.tictactoeCell').click(function(){
       if($(this).hasClass('clicked')){
           console.log('previously clicked');
@@ -91,7 +109,7 @@ var checkForWinner = function(rowSum,colSum,diagonal1Sum,diagonal2Sum){
 };
 var diagonalTopLeftBtmRht = function(){
     var sum = 0;
-    for(var i = 0;i <scoreBoard.length; i++){   
+    for(var i = 0;i <scoreBoard.length; i++){
         sum += scoreBoard[i][i];
     }
     return sum;
@@ -118,7 +136,7 @@ var checkVerticalCol = function(colIndex){
     });
     return sum;
 };
-var resetGame = function(){
+var resetGame = function(){ //////////////////////////////////need to fix for setTimeout
     $('.tictactoeCell').addClass('clicked');
     setTimeout(function(){
         counter = 0;
@@ -126,31 +144,37 @@ var resetGame = function(){
         $('.tictactoeCell').css({"background-color":"white"}).removeClass('clicked');
     },3000);
 };
+// ------------------------------------------------------------------------
 
-var evaluateMiniMax = function(){
-  //always start with -1 and alternate  
-};
-var callAi = function(){
-    var currentScoreBoard = createScoreBoardCopy();
-    //loopThrough all 0 value position of the scoreboard.
-    for(var i = 0; i < currentScoreBoard.length; i++){
-        for(var j = 0; j < currentScoreBoard.length; j++){
-            if(currentScoreBoard[i][j] == 0){
-                //evaluate 
-            }
-        }
-    }
-    //evaluate each position - needs to return list of initial input position that returns -3
-};
-var createScoreBoardCopy = function(){
-    var currentScoreBoard = [];
-    for(var i = 0; i < scoreBoard.length;i++){
-        var innerArr = [];
-        for(var j = 0; j < scoreBoard.length; j++){
-            var num = scoreBoard[i][j];
-            innerArr.push(num);
-        }
-        currentScoreBoard.push(innerArr);
-    }
-    return currentScoreBoard;
-};
+
+
+
+
+
+// var evaluateMiniMax = function(){
+//   //always start with -1 and alternate
+// };
+// var callAi = function(){
+//     var currentScoreBoard = createScoreBoardCopy();
+//     //loopThrough all 0 value position of the scoreboard.
+//     for(var i = 0; i < currentScoreBoard.length; i++){
+//         for(var j = 0; j < currentScoreBoard.length; j++){
+//             if(currentScoreBoard[i][j] == 0){
+//                 //evaluate
+//             }
+//         }
+//     }
+//     //evaluate each position - needs to return list of initial input position that returns -3
+// };
+// var createScoreBoardCopy = function(){
+//     var currentScoreBoard = [];
+//     for(var i = 0; i < scoreBoard.length;i++){
+//         var innerArr = [];
+//         for(var j = 0; j < scoreBoard.length; j++){
+//             var num = scoreBoard[i][j];
+//             innerArr.push(num);
+//         }
+//         currentScoreBoard.push(innerArr);
+//     }
+//     return currentScoreBoard;
+// };

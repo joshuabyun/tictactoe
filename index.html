@@ -16,9 +16,9 @@
     <h1 id="setting">Setting</h1>
     <div id="players">
         <h2 id="player-title">How Many Players?</h2>
-        <input class="player-buttons settingInput" id="player-1" type="radio" name="players" value=1>
+        <input class="player-buttons settingInput" id="player-1" type="radio" name="players" value=1 checked="checked">
         <label for="player-1">Player 1</label>
-        <input class="player-buttons settingInput" id="player-2" type="radio" name="players" value=2 checked="checked">
+        <input class="player-buttons settingInput" id="player-2" type="radio" name="players" value=2>
         <label for="player-2">Player 2</label>
     </div>
     <div id="size">
@@ -29,31 +29,32 @@
         <label class="game-size" for='5'>5</label>
     </div>
     <h2 id="chooseChar">Choose Character</h2>
-    <div id="characters">
-        <div class="charImg" id="superman">Player 1</div>
-        <div class="charImg" id="ironman"></div>
-        <div class="charImg" id="captainA"></div>
-        <div class="charImg" id="spiderM">Player 2</div>
-        <div class="charImg" id="wonderW"></div>
+    <h3 class="playerNum">Player 1</h3>
+    <div class="characters player1Char">
+        <div class="charImg ironman selected"></div>
+        <div class="charImg captainA"></div>
+        <div class="charImg superman"></div>
+        <div class="charImg spiderM"></div>
+    </div>
+    <h3 class="playerNum">Player 2</h3>
+    <div class="characters player2Char">
+        <div class="charImg ironman"></div>
+        <div class="charImg captainA selected"></div>
+        <div class="charImg superman"></div>
+        <div class="charImg spiderM"></div>
     </div>
     <h1 id="start">Start</h1>
 </div>
-<div id="gameBoard">
-    <div class="cellContainer">
-        <div class="tictactoeCell"></div>
-        <div class="tictactoeCell"></div>
-        <div class="tictactoeCell"></div>
-    </div>
-    <div class="cellContainer">
-        <div class="tictactoeCell"></div>
-        <div class="tictactoeCell"></div>
-        <div class="tictactoeCell"></div>
-    </div>
-    <div class="cellContainer">
-        <div class="tictactoeCell"></div>
-        <div class="tictactoeCell"></div>
-        <div class="tictactoeCell"></div>
-    </div>
+<div class="gameBoard">
+    <!--<div class="cellContainer">-->
+        <!--<div class="tictactoeCell"></div>-->
+        <!--<div class="tictactoeCell"></div>-->
+        <!--<div class="tictactoeCell"></div>-->
+    <!--</div>-->
+
+
+    <!--<div id="startNotification">PLEASE CHECK ALL SETTINGS AND PRESS START</div>-->
+    <!--<div id="winnerMsg">Player 1 Wins!<br>PLEASE CHECK ALL SETTINGS AND PRESS START FOR REPLAY</div>-->
 </div>
 </body>
 </html>
