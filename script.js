@@ -78,8 +78,16 @@ var initScoreScoreReaders = function(rowIndex,colIndex){
 var checkForWinner = function(rowSum,colSum,diagonal1Sum,diagonal2Sum){
     if(rowSum == scoreBoard.length || colSum == scoreBoard.length || diagonal1Sum == scoreBoard.length || diagonal2Sum == scoreBoard.length){
         console.log('gold won');
+        resetGame();
+        return;
     }else if(rowSum == -1*scoreBoard.length || colSum == -1*scoreBoard.length || diagonal1Sum == -1*scoreBoard.length || diagonal2Sum == -1*scoreBoard.length){
         console.log('blue won');
+        resetGame();
+        return;
+    }
+    if(counter == Math.sqrt(scoreBoard.length)-1){
+        console.log('draw');
+        resetGame();
     }
 };
 var diagonalTopLeftBtmRht = function(){
@@ -110,4 +118,9 @@ var checkVerticalCol = function(colIndex){
         sum += scoreBoard[index][colIndex]
     });
     return sum;
+};
+var resetGame = function(){
+  counter = 0;
+  scoreBoard = [[0,0,0],[0,0,0],[0,0,0]];
+  $('.tictactoeCell').css({"background-color":"white"});
 };
