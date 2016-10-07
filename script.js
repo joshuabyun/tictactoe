@@ -76,6 +76,7 @@ var initScoreScoreReaders = function(rowIndex,colIndex){
     checkForWinner(row,col,diagonal1,diagonal2);
 };
 var checkForWinner = function(rowSum,colSum,diagonal1Sum,diagonal2Sum){
+    console.log(counter);
     if(rowSum == scoreBoard.length || colSum == scoreBoard.length || diagonal1Sum == scoreBoard.length || diagonal2Sum == scoreBoard.length){
         console.log('gold won');
         resetGame();
@@ -85,7 +86,8 @@ var checkForWinner = function(rowSum,colSum,diagonal1Sum,diagonal2Sum){
         resetGame();
         return;
     }
-    if(counter == Math.sqrt(scoreBoard.length)-1){
+    console.log(Math.sqrt(scoreBoard.length)-1);
+    if(counter == Math.pow(scoreBoard.length,2)-1){
         console.log('draw');
         resetGame();
     }
@@ -124,3 +126,4 @@ var resetGame = function(){
   scoreBoard = [[0,0,0],[0,0,0],[0,0,0]];
   $('.tictactoeCell').css({"background-color":"white"}).removeClass('clicked');
 };
+
