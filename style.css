@@ -1,31 +1,60 @@
 *{
-    font-size: 0;
+    font-family: Bangers;
+    color: yellow;
+    text-shadow: 1px 1px #f44336;
 }
 body{
     height: 100vh;
     width: 100vw;
-    display:inline-block;
-    background-color: lightblue;
     margin: 0;
+    display:inline-block;
+    background-image: url('imgs/Publication1.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
-.gameBoard{
-    height:80%;
-    width:80%;
-    display: inline-block;
-    background-color: lightgreen;
+#title{
+    height: 20%;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    font-size: 3em;
+}
+#title >h1{
+    margin: 0;
+    position: relative;
+    top:50%;
+    transform: translateY(-50%);
+}
+#settingsButtons{
+    position:absolute;
+    height: 80%;
+    width:30%;
+    padding: 0 0 0 5%;
+    box-sizing: border-box;
+    font-size: 1.2em;
+}
+#settingsButtons label{
+    margin: 2%;
+}
+#players label{
+    display: block;
+}
+.settingInput{
+    display: none;
+}
+.settingInput:checked + label{
+    color:red;
+}
+#gameBoard{
+    height: 80%;
+    width: 70%;
+    position: absolute;
+    right: 0;
 }
 .cellContainer{
-    height:20%;
-    width:100%;
-    display: inline-block;
-    background-color: pink;
+
 }
 .tictactoeCell{
-    background-color: white;
-    height:100%;
-    width:20%;
-    box-sizing: border-box;
-    border:1px solid black;
-    display:inline-block;
-    font-size: initial;
+
 }
