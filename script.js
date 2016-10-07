@@ -122,8 +122,11 @@ var checkVerticalCol = function(colIndex){
     return sum;
 };
 var resetGame = function(){
-  counter = 0;
-  scoreBoard = [[0,0,0],[0,0,0],[0,0,0]];
-  $('.tictactoeCell').css({"background-color":"white"}).removeClass('clicked');
+    $('.tictactoeCell').addClass('clicked');
+    setTimeout(function(){
+        counter = 0;
+        scoreBoard = [[0,0,0],[0,0,0],[0,0,0]];
+        $('.tictactoeCell').css({"background-color":"white"}).removeClass('clicked');
+    },3000);
 };
 
