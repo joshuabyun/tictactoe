@@ -210,7 +210,7 @@ var resetGame = function(winner){
     $('.tictactoeCell').addClass('clicked');
     createWinnerMsg(winner);
     initSettingClickHandlers();
-    counter = 0;
+    counter = -1;
     scoreBoard = null;
     background = null;
 };
