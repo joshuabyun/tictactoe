@@ -34,9 +34,9 @@ var initGame = function(numberOfPlayers,gameBoardSize,p1Image,p2Image){
   background = [p1Image,p2Image];
   createGameBoard(gameBoardSize);
   scoreBoard = createScoreBoard(gameBoardSize);
-  if(gameBoardSize === 1){
+  if(numberOfPlayers === 1){
       apply1PGameBoardClickHandler(gameBoardSize);
-  }else if(gameBoardSize === 2){
+  }else if(numberOfPlayers === 2){
       apply2PGameBoardClickHandler(gameBoardSize);
   }
 };
