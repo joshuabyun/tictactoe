@@ -34,7 +34,11 @@ var initGame = function(numberOfPlayers,gameBoardSize,p1Image,p2Image){
   background = [p1Image,p2Image];
   createGameBoard(gameBoardSize);
   scoreBoard = createScoreBoard(gameBoardSize);
-  applyGameBoardClickHandler(gameBoardSize);
+  if(gameBoardSize === 1){
+      apply1PGameBoardClickHandler(gameBoardSize);
+  }else if(gameBoardSize === 2){
+      apply2PGameBoardClickHandler(gameBoardSize);
+  }
 };
 var createScoreBoard = function(gameBoardSize){
     switch(gameBoardSize){
@@ -65,22 +69,75 @@ var getCssDimensionForGameBoard = function(gameBoardSize){
     }
     return [cellContainerHeight,tictactoeCellWidth];
 };
-
-var applyGameBoardClickHandler = function(gameBoardSize){
+var apply2PGameBoardClickHandler = function(gameBoardSize){
   $('.tictactoeCell').click(function(){
       if($(this).hasClass('clicked')){
           console.log('previously clicked');
           return;
       }
       var player = checkWhosTurn(counter);
-      console.log($(this).parent().index());
-      console.log($(this).index());
       changeScoreBoard($(this).parent().index(),$(this).index(),player);
       changeCellColor(this,player);
       differentiateClickedCell(this);
       checkCorrectScoreReader($(this).parent().index(),$(this).index(),gameBoardSize);
       counter++;
   });
+};
+var apply1PGameBoardClickHandler = function(gameBoardSize){
+    $('.tictactoeCell').click(function(){
+        if($(this).hasClass('clicked')){
+            console.log('previously clicked');
+            return;
+        }
+        var player = checkWhosTurn(counter); //if returns -1, AI's turn
+        if(player == -1){
+            console.log('AI\'s turn');
+            return;
+        }
+        changeScoreBoard($(this).parent().index(),$(this).index(),player);
+        changeCellColor(this,player);
+        differentiateClickedCell(this);
+        checkCorrectScoreReader($(this).parent().index(),$(this).index(),gameBoardSize);
+        counter++;
+    });
+};
+var initAi = function(gameBoardSize){
+    aiFindBestPosInBoard();
+    // changeScoreBoard($(clickedElement).parent().index(),$(clickedElement).index(),-1);
+    // changeCellColor(clickedElement,-1);
+    // differentiateClickedCell(clickedElement);
+    // checkCorrectScoreReader($(clickedElement).parent().index(),$(clickedElement).index(),gameBoardSize);
+    // counter++;
+};
+var aiFindBestPosInBoard = function(){
+  //will return an array of [row,col]
+  //look for any row/col/dia with -2
+  //look for any row/col/dia with 2
+  //look for any row/col/dia with -1
+  //look for any row/col/dia with 1
+  //random
+  checkVerticalCol(colIndex);
+  checkHorizontalRow(rowIndex);
+  diagonalTopRhtBtmLeft();
+  diagonalTopLeftBtmRht();
+    
+    
+    
+  var checkList = [-2,2,-1,1];
+  for(var i = 0; i < checkList.length;i++){
+      diagonalTopRhtBtmLeft();
+      diagonalTopLeftBtmRht();
+      colRowCheck(checkList[i]);
+  }  
+    
+};
+var colRowCheck = function(){
+  for(var i = 0 ; i < scoreBoard.length ; i++){
+      var col = checkVerticalCol(i);
+      var row = checkHorizontalRow(i);
+      
+  }  
+    
 };
 var differentiateClickedCell = function(clickedCell){
     $(clickedCell).addClass('clicked');
