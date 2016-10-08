@@ -4,7 +4,7 @@ $( document ).ready(function(){
 var scoreBoard = null;
 var counter = 0;
 var background = null;
-//----------------------------reset functions --------------------------------------------
+//----------------------------setting/reset functions --------------------------------------------
 var initSettingClickHandlers = function(){
     applyClickToCharImg();
     applyClickToStart();
@@ -34,7 +34,7 @@ var initGame = function(numberOfPlayers,gameBoardSize,p1Image,p2Image){
   background = [p1Image,p2Image];
   createGameBoard(gameBoardSize);
   scoreBoard = createScoreBoard(gameBoardSize);
-  applyGameBoardClickHandler();
+  applyGameBoardClickHandler(gameBoardSize);
 };
 var createScoreBoard = function(gameBoardSize){
     switch(gameBoardSize){
@@ -66,7 +66,7 @@ var getCssDimensionForGameBoard = function(gameBoardSize){
     return [cellContainerHeight,tictactoeCellWidth];
 };
 
-var applyGameBoardClickHandler = function(){
+var applyGameBoardClickHandler = function(gameBoardSize){
   $('.tictactoeCell').click(function(){
       if($(this).hasClass('clicked')){
           console.log('previously clicked');
@@ -78,7 +78,7 @@ var applyGameBoardClickHandler = function(){
       changeScoreBoard($(this).parent().index(),$(this).index(),player);
       changeCellColor(this,player);
       differentiateClickedCell(this);
-      initScoreScoreReaders($(this).parent().index(),$(this).index(),player);
+      checkCorrectScoreReader($(this).parent().index(),$(this).index(),gameBoardSize);
       counter++;
   });
 };
@@ -99,7 +99,6 @@ var checkWhosTurn = function(counter){
     return returnVal;
 };
 var changeScoreBoard = function(parentPos,childPos,player){
-    console.log(scoreBoard);
     scoreBoard[parentPos][childPos] = player;
 };
 var changeCellColor = function(clickedCell,player){
@@ -122,7 +121,42 @@ var changeCellColor = function(clickedCell,player){
             break;
     }
 };
-var initScoreScoreReaders = function(rowIndex,colIndex){
+//---------------------------------checking for winning condition ------------------------------------------------
+var checkCorrectScoreReader = function(rowIndex,colIndex,gameBoardSize){
+    switch(gameBoardSize){
+        case 5 :
+            initSize5ScoreReaders(rowIndex,colIndex);
+            break;
+        default :   // gameBoardSize = 3
+            initSize3ScoreReaders(rowIndex,colIndex);
+    }
+};
+var initSize5ScoreReaders = function(rowIndex,colIndex){
+    var center = Math.floor(scoreBoard.length);
+    var row;
+    var col;
+    var diagonal1;
+    var diagonal2;
+    if(rowIndex == center && colIndex == center){
+        diagonal1 = diagonalTopLeftBtmRht();
+        diagonal2 = diagonalTopRhtBtmLeft();
+        row = checkHorizontalRow(rowIndex);
+        col = checkVerticalCol(colIndex);
+    }else if((rowIndex == 0 && colIndex == 0) || (rowIndex == 1 && colIndex == 1) || (rowIndex == scoreBoard.length-1 && colIndex == scoreBoard.length-1) || (rowIndex == scoreBoard.length-2 && colIndex == scoreBoard.length-2)){
+        diagonal1 = diagonalTopLeftBtmRht();
+        row = checkHorizontalRow(rowIndex);
+        col = checkVerticalCol(colIndex);
+    }else if((rowIndex == 0 && colIndex == scoreBoard.length-1) || (rowIndex == 1 && colIndex == scoreBoard.length-2) || (rowIndex == scoreBoard.length-1 && colIndex == 0) || (rowIndex == scoreBoard.length-2 && colIndex == 1)){
+        diagonal2 = diagonalTopRhtBtmLeft();
+        row = checkHorizontalRow(rowIndex);
+        col = checkVerticalCol(colIndex);
+    }else{
+        row = checkHorizontalRow(rowIndex);
+        col = checkVerticalCol(colIndex);
+    }
+    checkForWinner(row,col,diagonal1,diagonal2);
+};
+var initSize3ScoreReaders = function(rowIndex,colIndex){
     var center = Math.floor(scoreBoard.length);
     var row;
     var col;
@@ -191,6 +225,7 @@ var checkVerticalCol = function(colIndex){
     });
     return sum;
 };
+//------------------------game end msg/reset --------------------------------------------
 var createWinnerMsg = function(winner){
     var msg;
     var msg2;
@@ -214,31 +249,5 @@ var resetGame = function(winner){
     scoreBoard = null;
     background = null;
 };
-// ------------------------------------------------------------------------
-// var evaluateMiniMax = function(){
-//   //always start with -1 and alternate
-// };
-// var callAi = function(){
-//     var currentScoreBoard = createScoreBoardCopy();
-//     //loopThrough all 0 value position of the scoreboard.
-//     for(var i = 0; i < currentScoreBoard.length; i++){
-//         for(var j = 0; j < currentScoreBoard.length; j++){
-//             if(currentScoreBoard[i][j] == 0){
-//                 //evaluate
-//             }
-//         }
-//     }
-//     //evaluate each position - needs to return list of initial input position that returns -3
-// };
-// var createScoreBoardCopy = function(){
-//     var currentScoreBoard = [];
-//     for(var i = 0; i < scoreBoard.length;i++){
-//         var innerArr = [];
-//         for(var j = 0; j < scoreBoard.length; j++){
-//             var num = scoreBoard[i][j];
-//             innerArr.push(num);
-//         }
-//         currentScoreBoard.push(innerArr);
-//     }
-//     return currentScoreBoard;
-// };
+// --------------------------------AI---------------------------------------------
+
