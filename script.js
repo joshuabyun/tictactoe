@@ -101,6 +101,7 @@ var apply1PGameBoardClickHandler = function(gameBoardSize){
         counter++;
     });
 };
+//----------------------------AI-----------------------------------------------------
 var initAi = function(gameBoardSize){
     aiFindBestPosInBoard();
     // changeScoreBoard($(clickedElement).parent().index(),$(clickedElement).index(),-1);
@@ -127,17 +128,25 @@ var aiFindBestPosInBoard = function(){
   for(var i = 0; i < checkList.length;i++){
       diagonalTopRhtBtmLeft();
       diagonalTopLeftBtmRht();
-      colRowCheck(checkList[i]);
-  }  
-    
+      rowCheck(checkList[i]);
+      colCheck(checkList[i]);
+  }
+//----------------------------AI----------------------------------------------------
 };
-var colRowCheck = function(){
+var rowCheck = function(targetRowValue){
+  //return an obj {rowPos: x,  emptySlot:[a,b]  } //if more than 1 empty random
   for(var i = 0 ; i < scoreBoard.length ; i++){
-      var col = checkVerticalCol(i);
       var row = checkHorizontalRow(i);
       
-  }  
-    
+  }
+};
+var colCheck = function(targetColValue){
+    //return an obj {colPos: x,  emptySlot:[a,b]  } //if more than 1 empty random
+    for(var i = 0 ; i < scoreBoard.length ; i++){
+        var col = checkVerticalCol(i);
+        var row = checkHorizontalRow(i);
+
+    }
 };
 var differentiateClickedCell = function(clickedCell){
     $(clickedCell).addClass('clicked');
