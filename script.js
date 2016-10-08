@@ -17,12 +17,13 @@ var applyClickToCharImg = function(){
 };
 var applyClickToStart = function(){
     $('#settingsButtons').on('click','#start',function(){
-        var numberOfPlayers = Number($('.player-buttons:checked').val());
+        // var numberOfPlayers = Number($('.player-buttons:checked').val());
         var gameBoardSize = Number($('.game-size:checked').val());
         var p1Image = $('.player1Char > .selected').css('background-image');
         var p2Image = $('.player2Char > .selected').css('background-image');
         $('.gameBoard *').remove();
-        initGame(numberOfPlayers,gameBoardSize,p1Image,p2Image);
+        // initGame(numberOfPlayers,gameBoardSize,p1Image,p2Image);
+        initGame(null,gameBoardSize,p1Image,p2Image);
         removeClickOnSetting();
     })};
 var removeClickOnSetting = function(){
@@ -34,11 +35,12 @@ var initGame = function(numberOfPlayers,gameBoardSize,p1Image,p2Image){
   background = [p1Image,p2Image];
   createGameBoard(gameBoardSize);
   scoreBoard = createScoreBoard(gameBoardSize);
-  if(numberOfPlayers === 1){
-      apply1PGameBoardClickHandler(gameBoardSize);
-  }else if(numberOfPlayers === 2){
-      apply2PGameBoardClickHandler(gameBoardSize);
-  }
+  apply2PGameBoardClickHandler(gameBoardSize);
+  // if(numberOfPlayers === 1){
+  //     apply1PGameBoardClickHandler(gameBoardSize);
+  // }else if(numberOfPlayers === 2){
+  //     apply2PGameBoardClickHandler(gameBoardSize);
+  // }
 };
 var createScoreBoard = function(gameBoardSize){
     switch(gameBoardSize){
