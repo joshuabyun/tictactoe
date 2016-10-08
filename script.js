@@ -21,7 +21,7 @@ var applyClickToStart = function(){
         var gameBoardSize = Number($('.game-size:checked').val());
         var p1Image = $('.player1Char > .selected').css('background-image');
         var p2Image = $('.player2Char > .selected').css('background-image');
-        $('#startNotification').remove();
+        $('.gameBoard *').remove();
         initGame(numberOfPlayers,gameBoardSize,p1Image,p2Image);
         removeClickOnSetting();
     })};
@@ -150,16 +150,16 @@ var initScoreScoreReaders = function(rowIndex,colIndex){
 var checkForWinner = function(rowSum,colSum,diagonal1Sum,diagonal2Sum){
     if(rowSum == scoreBoard.length || colSum == scoreBoard.length || diagonal1Sum == scoreBoard.length || diagonal2Sum == scoreBoard.length){
         console.log('gold won');
-        resetGame();
+        resetGame('Player 1');
         return;
     }else if(rowSum == -1*scoreBoard.length || colSum == -1*scoreBoard.length || diagonal1Sum == -1*scoreBoard.length || diagonal2Sum == -1*scoreBoard.length){
         console.log('blue won');
-        resetGame();
+        resetGame('Player 2');
         return;
     }
     if(counter == Math.pow(scoreBoard.length,2)-1){
-        console.log('draw');
-        resetGame();
+        console.log('Tie');
+        resetGame('Tie');
     }
 };
 var diagonalTopLeftBtmRht = function(){
@@ -191,16 +191,28 @@ var checkVerticalCol = function(colIndex){
     });
     return sum;
 };
-var resetGame = function(){ //////////////////////////////////need to fix for setTimeout
+var createWinnerMsg = function(winner){
+    var msg;
+    var msg2;
+    switch(winner){
+        case 'Tie':
+            msg = $('<div>').attr({'id':'winnerMsg'}).text(winner+"!");
+            msg2 = $('<div>').attr({'id':'winnerMsgNotification'}).text("PLEASE CHECK ALL SETTINGS AND PRESS START FOR REPLAY");
+            $('.gameBoard').append(msg,msg2);
+            break;
+        default:
+            msg = $('<div>').attr({'id':'winnerMsg'}).text(winner+" Won!");
+            msg2 = $('<div>').attr({'id':'winnerMsgNotification'}).text("PLEASE CHECK ALL SETTINGS AND PRESS START FOR REPLAY");
+            $('.gameBoard').append(msg,msg2);
+    }
+};
+var resetGame = function(winner){ 
     $('.tictactoeCell').addClass('clicked');
-    setTimeout(function(){
-        counter = 0;
-        scoreBoard = null;
-        background = null;
-        initSettingClickHandlers
-        $('.gameBoard *').remove();
-
-    },3000);
+    createWinnerMsg(winner);
+    initSettingClickHandlers();
+    counter = 0;
+    scoreBoard = null;
+    background = null;
 };
 // ------------------------------------------------------------------------
 // var evaluateMiniMax = function(){
