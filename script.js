@@ -131,7 +131,6 @@ var aiFindBestPosInBoard = function(){
       rowCheck(checkList[i]);
       colCheck(checkList[i]);
   }
-//----------------------------AI----------------------------------------------------
 };
 var rowCheck = function(targetRowValue){
   //return an obj {rowPos: x,  emptySlot:[a,b]  } //if more than 1 empty random
@@ -148,6 +147,7 @@ var colCheck = function(targetColValue){
 
     }
 };
+//----------------------------AI----------------------------------------------------
 var differentiateClickedCell = function(clickedCell){
     $(clickedCell).addClass('clicked');
 };
@@ -315,5 +315,5 @@ var resetGame = function(winner){
     scoreBoard = null;
     background = null;
 };
-// --------------------------------AI---------------------------------------------
+
 
