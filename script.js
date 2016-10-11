@@ -100,7 +100,9 @@ var apply1PGameBoardClickHandler = function(gameBoardSize){
         differentiateClickedCell(this);
         checkCorrectScoreReader($(this).parent().index(),$(this).index(),gameBoardSize);
         counter++;
-        initAi();
+        if(scoreBoard!=null){
+            initAi();
+        }
     });
 };
 //----------------------------AI-----------------------------------------------------
