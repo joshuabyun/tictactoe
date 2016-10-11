@@ -79,6 +79,7 @@ var apply2PGameBoardClickHandler = function(gameBoardSize){
       changeScoreBoard($(this).parent().index(),$(this).index(),player);
       changeCellColor(this,player);
       differentiateClickedCell(this);
+      console.log(scoreBoard);
       checkCorrectScoreReader($(this).parent().index(),$(this).index(),gameBoardSize);
       counter++;
   });
@@ -99,55 +100,86 @@ var apply1PGameBoardClickHandler = function(gameBoardSize){
         differentiateClickedCell(this);
         checkCorrectScoreReader($(this).parent().index(),$(this).index(),gameBoardSize);
         counter++;
+        initAi();
     });
 };
 //----------------------------AI-----------------------------------------------------
 var initAi = function(gameBoardSize){
-    aiFindBestPosInBoard();
-    // changeScoreBoard($(clickedElement).parent().index(),$(clickedElement).index(),-1);
+    var aiPostion = aiFindBestPosInBoard();
+    var row = aiPostion[0];
+    var col = aiPostion[1];
+    changeScoreBoard(row,col,-1);
+
+    console.log(scoreBoard);
+    console.log(aiPostion);
+    console.log($('.gameBoard > .cellContainer').index(row));
+
     // changeCellColor(clickedElement,-1);
     // differentiateClickedCell(clickedElement);
     // checkCorrectScoreReader($(clickedElement).parent().index(),$(clickedElement).index(),gameBoardSize);
     // counter++;
 };
 var aiFindBestPosInBoard = function(){
-  //will return an array of [row,col]
-  //look for any row/col/dia with -2
+  var scoreObj = refineScoreObj(collectCurrentScore());
+  console.log(scoreObj);
+  if(jQuery.isEmptyObject(scoreObj)){
+      //randomly choose a slot
+      var aiPosition = chooseRandomSlot(findEmptySlot());
+      return aiPosition;
+  }
+
+
+
+    //look for any row/col/dia with -2
   //look for any row/col/dia with 2
   //look for any row/col/dia with -1
   //look for any row/col/dia with 1
   //random
-  checkVerticalCol(colIndex);
-  checkHorizontalRow(rowIndex);
-  diagonalTopRhtBtmLeft();
-  diagonalTopLeftBtmRht();
-    
-    
-    
-  var checkList = [-2,2,-1,1];
-  for(var i = 0; i < checkList.length;i++){
-      diagonalTopRhtBtmLeft();
-      diagonalTopLeftBtmRht();
-      rowCheck(checkList[i]);
-      colCheck(checkList[i]);
-  }
-};
-var rowCheck = function(targetRowValue){
-  //return an obj {rowPos: x,  emptySlot:[a,b]  } //if more than 1 empty random
-  for(var i = 0 ; i < scoreBoard.length ; i++){
-      var row = checkHorizontalRow(i);
-      
-  }
-};
-var colCheck = function(targetColValue){
-    //return an obj {colPos: x,  emptySlot:[a,b]  } //if more than 1 empty random
-    for(var i = 0 ; i < scoreBoard.length ; i++){
-        var col = checkVerticalCol(i);
-        var row = checkHorizontalRow(i);
 
-    }
+  //-2 or -4
+    
+  //   diagonalTopLeftBtmRht
+  //   diagonalTopRhtBtmLeft
+  //   checkHorizontalRow(param)
+  //   checkVerticalCol(param)  
+
 };
-//----------------------------AI----------------------------------------------------
+var findEmptySlot = function(){
+    var positionArr = [];
+    for(var i = 0; i < scoreBoard.length; i++){
+        for(var j = 0; j < scoreBoard.length; j++){
+            if(scoreBoard[i][j] == 0){
+                positionArr.push([i,j]);
+            }
+        }
+    }
+    return positionArr;
+};
+var chooseRandomSlot = function(array){
+    var arrPos = Math.floor(Math.random()*array.length);
+    return array[arrPos];
+};
+var refineScoreObj = function(currentScoreObj){
+ var returnObj = {};
+ for(var each in currentScoreObj){
+     //console.log(currentScoreObj[each]);
+     if(currentScoreObj[each].sum == 2  ){//scoreBoard.length-1
+         returnObj[each] = currentScoreObj[each];
+     }
+ }
+ return returnObj;
+};
+var collectCurrentScore = function(){
+  var returnObj = {};
+  returnObj.diagonalObj1 = diagonalTopLeftBtmRht();
+  returnObj.diagonalObj2 = diagonalTopRhtBtmLeft();
+  for(var i = 0; i < scoreBoard.length; i++){
+      returnObj['row'+i] = checkHorizontalRow(i);
+      returnObj['col'+i] = checkVerticalCol(i);
+  }
+  return returnObj;
+};
+//----------------------------------------------------------------------------------
 var differentiateClickedCell = function(clickedCell){
     $(clickedCell).addClass('clicked');
 };
@@ -204,21 +236,21 @@ var initSize5ScoreReaders = function(rowIndex,colIndex){
     var diagonal1;
     var diagonal2;
     if(rowIndex == center && colIndex == center){
-        diagonal1 = diagonalTopLeftBtmRht();
-        diagonal2 = diagonalTopRhtBtmLeft();
-        row = checkHorizontalRow(rowIndex);
-        col = checkVerticalCol(colIndex);
+        diagonal1 = diagonalTopLeftBtmRht().sum;
+        diagonal2 = diagonalTopRhtBtmLeft().sum;
+        row = checkHorizontalRow(rowIndex).sum;
+        col = checkVerticalCol(colIndex).sum;
     }else if((rowIndex == 0 && colIndex == 0) || (rowIndex == 1 && colIndex == 1) || (rowIndex == scoreBoard.length-1 && colIndex == scoreBoard.length-1) || (rowIndex == scoreBoard.length-2 && colIndex == scoreBoard.length-2)){
-        diagonal1 = diagonalTopLeftBtmRht();
-        row = checkHorizontalRow(rowIndex);
-        col = checkVerticalCol(colIndex);
+        diagonal1 = diagonalTopLeftBtmRht().sum;
+        row = checkHorizontalRow(rowIndex).sum;
+        col = checkVerticalCol(colIndex).sum;
     }else if((rowIndex == 0 && colIndex == scoreBoard.length-1) || (rowIndex == 1 && colIndex == scoreBoard.length-2) || (rowIndex == scoreBoard.length-1 && colIndex == 0) || (rowIndex == scoreBoard.length-2 && colIndex == 1)){
-        diagonal2 = diagonalTopRhtBtmLeft();
-        row = checkHorizontalRow(rowIndex);
-        col = checkVerticalCol(colIndex);
+        diagonal2 = diagonalTopRhtBtmLeft().sum;
+        row = checkHorizontalRow(rowIndex).sum;
+        col = checkVerticalCol(colIndex).sum;
     }else{
-        row = checkHorizontalRow(rowIndex);
-        col = checkVerticalCol(colIndex);
+        row = checkHorizontalRow(rowIndex).sum;
+        col = checkVerticalCol(colIndex).sum;
     }
     checkForWinner(row,col,diagonal1,diagonal2);
 };
@@ -229,21 +261,21 @@ var initSize3ScoreReaders = function(rowIndex,colIndex){
     var diagonal1;
     var diagonal2;
     if(rowIndex == center && colIndex == center){
-        diagonal1 = diagonalTopLeftBtmRht();
-        diagonal2 = diagonalTopRhtBtmLeft();
-        row = checkHorizontalRow(rowIndex);
-        col = checkVerticalCol(colIndex);
+        diagonal1 = diagonalTopLeftBtmRht().sum;
+        diagonal2 = diagonalTopRhtBtmLeft().sum;
+        row = checkHorizontalRow(rowIndex).sum;
+        col = checkVerticalCol(colIndex).sum;
     }else if((rowIndex == 0 && colIndex == 0) || (rowIndex == scoreBoard.length-1 && colIndex == scoreBoard.length-1)){
-        diagonal1 = diagonalTopLeftBtmRht();
-        row = checkHorizontalRow(rowIndex);
-        col = checkVerticalCol(colIndex);
+        diagonal1 = diagonalTopLeftBtmRht().sum;
+        row = checkHorizontalRow(rowIndex).sum;
+        col = checkVerticalCol(colIndex).sum;
     }else if((rowIndex == 0 && colIndex == scoreBoard.length-1) || (rowIndex == scoreBoard.length-1 && colIndex == 0)){
-        diagonal2 = diagonalTopRhtBtmLeft();
-        row = checkHorizontalRow(rowIndex);
-        col = checkVerticalCol(colIndex);
+        diagonal2 = diagonalTopRhtBtmLeft().sum;
+        row = checkHorizontalRow(rowIndex).sum;
+        col = checkVerticalCol(colIndex).sum;
     }else{
-        row = checkHorizontalRow(rowIndex);
-        col = checkVerticalCol(colIndex);
+        row = checkHorizontalRow(rowIndex).sum;
+        col = checkVerticalCol(colIndex).sum;
     }
     checkForWinner(row,col,diagonal1,diagonal2);
 };
@@ -264,32 +296,44 @@ var checkForWinner = function(rowSum,colSum,diagonal1Sum,diagonal2Sum){
 };
 var diagonalTopLeftBtmRht = function(){
     var sum = 0;
+    var diagonalObj = {checkSlotScore : []};
     for(var i = 0;i <scoreBoard.length; i++){
         sum += scoreBoard[i][i];
+        diagonalObj.checkSlotScore.push(scoreBoard[i][i]);
     }
-    return sum;
+    diagonalObj.sum = sum;
+    return diagonalObj;
 };
 var diagonalTopRhtBtmLeft = function(){
     var sum = 0;
+    var diagonalObj = {checkSlotScore : []};
     var col = scoreBoard.length-1;
     for(var i = 0;i <scoreBoard.length; i++){
         sum += scoreBoard[i][col-i];
+        diagonalObj.checkSlotScore.push(scoreBoard[i][col-i]);
     }
-    return sum;
+    diagonalObj.sum = sum;
+    return diagonalObj;
 };
 var checkHorizontalRow = function(rowIndex){
     var sum =0;
+    var rowObj = {checkSlotScore : []};
     scoreBoard[rowIndex].forEach(function(currentValue){
         sum +=currentValue;
+        rowObj.checkSlotScore.push(currentValue);
     });
-    return sum;
+    rowObj.sum = sum;
+    return rowObj;
 };
 var checkVerticalCol = function(colIndex){
     var sum = 0;
+    var colObj = {checkSlotScore : []};
     scoreBoard.forEach(function(currentValue,index){
-        sum += scoreBoard[index][colIndex]
+        sum += scoreBoard[index][colIndex];
+        colObj.checkSlotScore.push(scoreBoard[index][colIndex]);
     });
-    return sum;
+    colObj.sum = sum;
+    return colObj;
 };
 //------------------------game end msg/reset --------------------------------------------
 var createWinnerMsg = function(winner){
