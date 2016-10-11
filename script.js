@@ -105,26 +105,30 @@ var apply1PGameBoardClickHandler = function(gameBoardSize){
 };
 //----------------------------AI-----------------------------------------------------
 var initAi = function(gameBoardSize){
-    var aiPostion = aiFindBestPosInBoard();
-    var row = aiPostion[0];
-    var col = aiPostion[1];
-    changeScoreBoard(row,col,-1);
-
+    var aiPosition = aiFindBestPosInBoard();//array of ai position
+    var nthRow = aiPosition[0]+1;
+    var nthCol = aiPosition[1]+1;
+    changeScoreBoard(nthRow-1,nthCol-1,-1);
     console.log(scoreBoard);
-    console.log(aiPostion);
-    console.log($('.gameBoard > .cellContainer').index(row));
-
-    // changeCellColor(clickedElement,-1);
-    // differentiateClickedCell(clickedElement);
-    // checkCorrectScoreReader($(clickedElement).parent().index(),$(clickedElement).index(),gameBoardSize);
-    // counter++;
+    console.log(aiPosition);
+    $('.cellContainer:nth-child('+nthRow+')').addClass('randomRow');
+    $('.randomRow > .tictactoeCell:nth-child('+nthCol+')').css({
+         'background-image':background[1],
+         'background-position': 'center',
+         'background-repeat': 'no-repeat',
+         'background-size': 'contain'
+    });
+    differentiateClickedCell($('.randomRow > .tictactoeCell:nth-child('+nthCol+')'));
+    checkCorrectScoreReader(nthRow-1,nthCol-1,gameBoardSize);
+    $('.cellContainer:nth-child('+nthRow+')').removeClass('randomRow');
+    counter++;
 };
 var aiFindBestPosInBoard = function(){
-  var scoreObj = refineScoreObj(collectCurrentScore());
+  var scoreObj = refineScoreObj(collectCurrentScore(),scoreBoard.length-1);
   console.log(scoreObj);
   if(jQuery.isEmptyObject(scoreObj)){
       //randomly choose a slot
-      var aiPosition = chooseRandomSlot(findEmptySlot());
+      var aiPosition = chooseRandomSlotPos(findOpenSlot());
       return aiPosition;
   }
 
@@ -144,7 +148,7 @@ var aiFindBestPosInBoard = function(){
   //   checkVerticalCol(param)  
 
 };
-var findEmptySlot = function(){
+var findOpenSlot = function(){
     var positionArr = [];
     for(var i = 0; i < scoreBoard.length; i++){
         for(var j = 0; j < scoreBoard.length; j++){
@@ -155,19 +159,20 @@ var findEmptySlot = function(){
     }
     return positionArr;
 };
-var chooseRandomSlot = function(array){
+var chooseRandomSlotPos = function(array){
     var arrPos = Math.floor(Math.random()*array.length);
     return array[arrPos];
 };
-var refineScoreObj = function(currentScoreObj){
+var refineScoreObj = function(currentScoreObj,targetNum){
  var returnObj = {};
  for(var each in currentScoreObj){
      //console.log(currentScoreObj[each]);
-     if(currentScoreObj[each].sum == 2  ){//scoreBoard.length-1
+     if(currentScoreObj[each].sum == 1  ){//scoreBoard.length-1
          returnObj[each] = currentScoreObj[each];
      }
  }
- return returnObj;
+    console.log(returnObj);
+    return returnObj;
 };
 var collectCurrentScore = function(){
   var returnObj = {};
