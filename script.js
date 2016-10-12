@@ -100,7 +100,9 @@ var apply1PGameBoardClickHandler = function(gameBoardSize){
         differentiateClickedCell(this);
         checkCorrectScoreReader($(this).parent().index(),$(this).index(),gameBoardSize);
         counter++;
-        initAi();
+        if(scoreBoard!=null){
+            initAi();
+        }
     });
 };
 //----------------------------AI-----------------------------------------------------
@@ -250,7 +252,7 @@ var initSize5ScoreReaders = function(rowIndex,colIndex){
     checkForWinner(row,col,diagonal1,diagonal2);
 };
 var initSize3ScoreReaders = function(rowIndex,colIndex){
-    var center = Math.floor(scoreBoard.length);
+    var center = Math.floor(scoreBoard.length/2);
     var row;
     var col;
     var diagonal1;
