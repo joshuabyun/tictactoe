@@ -100,10 +100,37 @@ var apply1PGameBoardClickHandler = function(gameBoardSize){
         differentiateClickedCell(this);
         checkCorrectScoreReader($(this).parent().index(),$(this).index(),gameBoardSize);
         counter++;
+        loadGif();
         if(scoreBoard!=null){
-            initAi();
+            var sec = Math.floor(Math.random()*2)+1;
+            console.log("sec",sec)
+            var t0 = performance.now();
+            setTimeout(function(){
+                var t1 = performance.now();
+                console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
+                removeGif();
+                initAi();
+            },1000*sec);
         }
     });
+};
+var loadGif = function(){
+    if(scoreBoard == undefined){
+        return
+    }
+    var centerRow = Math.ceil(scoreBoard.length/2);
+    console.log("centerRow",centerRow);
+    $('.cellContainer:nth-child('+centerRow+')').addClass('loadingRow');
+    $('<div>').addClass('loading').appendTo($('.loadingRow > .tictactoeCell:nth-child('+centerRow+')'));
+};
+var removeGif =function(){
+    if(scoreBoard.length == undefined){
+        return
+    }
+    if(scoreBoard.length == undefined) return;
+    var centerRow = Math.ceil(scoreBoard.length/2);
+    $('.loadingRow > .tictactoeCell:nth-child('+centerRow+') > div').remove();
+    $('.cellContainer:nth-child('+centerRow+')').removeClass('loadingRow');
 };
 //----------------------------AI-----------------------------------------------------
 var initAi = function(gameBoardSize){

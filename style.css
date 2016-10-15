@@ -128,6 +128,19 @@ body{
     box-sizing: border-box;
     border-radius: 10px;
 }
+.loading{
+    height: 60%;
+    width:55%;
+    display: inline-block;
+    position: absolute;
+    background-image: url('imgs/loading.gif');
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 /*----------------notification--------------------*/
 #startNotification, #winnerMsg, #winnerMsgNotification{
     position: absolute;
